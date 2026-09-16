@@ -1,6 +1,6 @@
 const MPS_TO_MPH = 2.236936;
 
-// Inisialisasi DOM Elements
+// Inisialisasi Element DOM
 const elSpeed = document.getElementById('speed-display');
 const elGear = document.getElementById('gear');
 const elOdo = document.getElementById('odometer');
@@ -8,7 +8,11 @@ const hSegs = document.querySelectorAll('.h-seg');
 const fSegs = document.querySelectorAll('.f-seg');
 const rpmSegs = document.querySelectorAll('.rpm-segment');
 
-// Helper Parser: Menangani input boolean/integer/string dari CEF Game
+// Helper Parser: Mendeteksi nilai TRUE/LOCKED dari JGRP (menerima 1, "1", true, "true", atau 2)
+function isLockedState(val) {
+    return val === true || val === 1 || val === "1" || val === "true" || val === 2 || val === "2";
+}
+
 function isTrueValue(val) {
     return val === true || val === 1 || val === "1" || val === "true";
 }
@@ -39,18 +43,20 @@ window.setRPM = function(rpm) {
     });
 };
 
-// 3. Fuel Segmen
+// 3. Bensin (Fuel)
 window.setFuel = function(fuel) {
     const val = Number(fuel || 0);
     const totalSegs = fSegs.length;
-    const activeSegs = Math.round(val * totalSegs);
+    // Mendukung nilai 0.0-1.0 maupun 0-100%
+    const percent = (val > 1) ? (val / 100) : val;
+    const activeSegs = Math.round(percent * totalSegs);
     fSegs.forEach((seg, i) => {
         if (i < activeSegs) seg.classList.add('active');
         else seg.classList.remove('active');
     });
 };
 
-// 4. Health Segmen
+// 4. Engine Health
 window.setHealth = function(health) {
     let val = Number(health || 0);
     let percent = (val > 1) ? (val / 1000) : val;
@@ -81,10 +87,27 @@ window.setGear = function(gear) {
     elGear.innerText = (gear == 0 || gear === "0") ? 'R' : String(gear);
 };
 
-// 6. Engine
-window.setEngine = function(state) {};
+// 6. Lock / Unlock Vehicle (Mendukung semua alternatif panggilan JGRP)
+window.updateLockStatus = function(state) {
+    const el = document.getElementById('door-lock');
+    if (!el) return;
+    
+    if (isLockedState(state)) {
+        el.className = 'icon-item locked'; // Nyala kuning/hijau (Terkunci)
+    } else {
+        el.className = 'icon-item';        // Mati (Membuka)
+    }
+};
 
-// 7. Headlights
+// Pemetaan fungsi lock/unlock ke berbagai nama alias CEF
+window.setDoors = window.updateLockStatus;
+window.setDoorLock = window.updateLockStatus;
+window.setVehicleLocked = window.updateLockStatus;
+window.setLocked = window.updateLockStatus;
+window.setLock = window.updateLockStatus;
+window.toggleLock = window.updateLockStatus;
+
+// 7. Lampu
 window.setHeadlights = function(state) {
     const low = document.getElementById('headlight-low');
     const high = document.getElementById('headlight-high');
@@ -93,7 +116,7 @@ window.setHeadlights = function(state) {
     if (high) high.className = (val === 2) ? 'icon-item high-beam' : 'icon-item';
 };
 
-// 8 & 9. Lampu Sein
+// 8. Lampu Sein (Turn Signals)
 window.setLeftIndicator = function(state) {
     const el = document.getElementById('indicator-left');
     if (el) el.className = isTrueValue(state) ? 'icon-item active' : 'icon-item';
@@ -104,26 +127,23 @@ window.setRightIndicator = function(state) {
     if (el) el.className = isTrueValue(state) ? 'icon-item active' : 'icon-item';
 };
 
-// 10. Seatbelt
+// 9. Seatbelt
 window.setSeatbelts = function(state) {
     const el = document.getElementById('seatbelts');
     if (el) el.className = isTrueValue(state) ? 'icon-item active' : 'icon-item warn';
 };
 
-// 11. Door Lock (Door Lock / Vehicle Lock)
-window.setDoors = function(state) {
-    const el = document.getElementById('door-lock');
-    if (el) el.className = isTrueValue(state) ? 'icon-item locked' : 'icon-item';
-};
-
-// Alias pendukung
-window.setVehicleLocked = window.setDoors;
-window.setLocked = window.setDoors;
-window.setLock = window.setDoors;
-
-// 12. Odometer
+// 10. Odometer
 window.setOdometer = function(distance) {
     if (elOdo) elOdo.innerText = `${Number(distance || 0).toFixed(1)} mi`;
 };
 
-window.setSpeedMode = function(mode) {};
+// Handler untuk komunikasi via Event Message
+window.addEventListener('message', function(event) {
+    if (!event.data) return;
+    const data = event.data;
+    
+    if (data.type === 'setDoors' || data.action === 'setDoors' || data.type === 'lock') {
+        window.updateLockStatus(data.status !== undefined ? data.status : data.state);
+    }
+});
