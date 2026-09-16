@@ -8,10 +8,15 @@ const hSegs = document.querySelectorAll('.h-seg');
 const fSegs = document.querySelectorAll('.f-seg');
 const rpmSegs = document.querySelectorAll('.rpm-segment');
 
+// Helper Parser: Menangani input boolean/integer/string dari CEF Game
+function isTrueValue(val) {
+    return val === true || val === 1 || val === "1" || val === "true";
+}
+
 // 1. Kecepatan (3 Digit)
 window.setSpeed = function(speed) {
     if (!elSpeed) return;
-    const mph = Math.round(speed * MPS_TO_MPH);
+    const mph = Math.round(Number(speed || 0) * MPS_TO_MPH);
     const padded = String(mph).padStart(3, '0');
     
     if (mph < 10) {
@@ -25,18 +30,20 @@ window.setSpeed = function(speed) {
 
 // 2. RPM Bar
 window.setRPM = function(rpm) {
+    const val = Number(rpm || 0);
     const totalSegs = rpmSegs.length;
-    const activeSegs = Math.round(rpm * totalSegs);
+    const activeSegs = Math.round(val * totalSegs);
     rpmSegs.forEach((seg, i) => {
         if (i < activeSegs) seg.classList.add('active');
         else seg.classList.remove('active');
     });
 };
 
-// 3. Fuel Segmen (Putih)
+// 3. Fuel Segmen
 window.setFuel = function(fuel) {
+    const val = Number(fuel || 0);
     const totalSegs = fSegs.length;
-    const activeSegs = Math.round(fuel * totalSegs);
+    const activeSegs = Math.round(val * totalSegs);
     fSegs.forEach((seg, i) => {
         if (i < activeSegs) seg.classList.add('active');
         else seg.classList.remove('active');
@@ -45,8 +52,10 @@ window.setFuel = function(fuel) {
 
 // 4. Health Segmen
 window.setHealth = function(health) {
-    let percent = (health > 1) ? (health / 1000) : health;
+    let val = Number(health || 0);
+    let percent = (val > 1) ? (val / 1000) : val;
     percent = Math.max(0, Math.min(1, percent));
+    
     const totalSegs = hSegs.length;
     const activeSegs = Math.round(percent * totalSegs);
     const engineIcon = document.getElementById('engine-icon');
@@ -69,7 +78,7 @@ window.setHealth = function(health) {
 // 5. Gear
 window.setGear = function(gear) {
     if (!elGear) return;
-    elGear.innerText = (gear === 0) ? 'R' : String(gear);
+    elGear.innerText = (gear == 0 || gear === "0") ? 'R' : String(gear);
 };
 
 // 6. Engine
@@ -79,41 +88,42 @@ window.setEngine = function(state) {};
 window.setHeadlights = function(state) {
     const low = document.getElementById('headlight-low');
     const high = document.getElementById('headlight-high');
-    if (low) low.className = (state === 1) ? 'icon-item active' : 'icon-item';
-    if (high) high.className = (state === 2) ? 'icon-item high-beam' : 'icon-item';
+    const val = Number(state || 0);
+    if (low) low.className = (val === 1) ? 'icon-item active' : 'icon-item';
+    if (high) high.className = (val === 2) ? 'icon-item high-beam' : 'icon-item';
 };
 
 // 8 & 9. Lampu Sein
 window.setLeftIndicator = function(state) {
     const el = document.getElementById('indicator-left');
-    if (el) el.className = state ? 'icon-item active' : 'icon-item';
+    if (el) el.className = isTrueValue(state) ? 'icon-item active' : 'icon-item';
 };
 
 window.setRightIndicator = function(state) {
     const el = document.getElementById('indicator-right');
-    if (el) el.className = state ? 'icon-item active' : 'icon-item';
+    if (el) el.className = isTrueValue(state) ? 'icon-item active' : 'icon-item';
 };
 
 // 10. Seatbelt
 window.setSeatbelts = function(state) {
     const el = document.getElementById('seatbelts');
-    if (el) el.className = state ? 'icon-item active' : 'icon-item warn';
+    if (el) el.className = isTrueValue(state) ? 'icon-item active' : 'icon-item warn';
 };
 
-// 11. Door Lock / Vehicle Lock (Ditambah Alias Kompatibilitas)
+// 11. Door Lock (Door Lock / Vehicle Lock)
 window.setDoors = function(state) {
     const el = document.getElementById('door-lock');
-    if (el) el.className = (state == 1 || state === true) ? 'icon-item locked' : 'icon-item';
+    if (el) el.className = isTrueValue(state) ? 'icon-item locked' : 'icon-item';
 };
 
-// Alias pendukung jika mod panggilan gamenya menggunakan nama fungsi berbeda
+// Alias pendukung
 window.setVehicleLocked = window.setDoors;
 window.setLocked = window.setDoors;
 window.setLock = window.setDoors;
 
 // 12. Odometer
 window.setOdometer = function(distance) {
-    if (elOdo) elOdo.innerText = `${distance.toFixed(1)} mi`;
+    if (elOdo) elOdo.innerText = `${Number(distance || 0).toFixed(1)} mi`;
 };
 
 window.setSpeedMode = function(mode) {};
