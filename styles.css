@@ -74,10 +74,11 @@ html, body {
     border-radius: 6px;
 }
 
+/* TRANSMISI / GEAR (Ubah ke Putih) */
 .gear-main {
     font-size: 18px;
     font-weight: 800;
-    color: #ffea00;
+    color: #ffffff;
 }
 
 .speed-unit {
@@ -114,6 +115,18 @@ html, body {
     color: rgba(255, 255, 255, 0.4);
 }
 
+.icons-label {
+    align-items: center;
+}
+
+.mini-icon {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.danger-icon {
+    color: #ff3333;
+}
+
 .stat-segments {
     display: flex;
     flex-direction: column-reverse;
@@ -127,7 +140,7 @@ html, body {
     border-radius: 1px;
 }
 
-/* BAR SEGMEN ENGINE & FUEL (Keduanya dibuat Putih Bersih) */
+/* BAR SEGMEN ENGINE & FUEL (Putih) */
 .h-seg.active, .f-seg.active { 
     background: #ffffff; 
 }
@@ -141,11 +154,11 @@ html, body {
 }
 
 #engine-icon.active-warn {
-    color: #ff9100; /* Nyala Oranye saat Health <= 50% */
+    color: #ff9100;
 }
 
 #engine-icon.active-danger {
-    color: #ff3333; /* Nyala Merah saat Health <= 25% */
+    color: #ff3333;
 }
 
 /* RPM BAR */
@@ -195,4 +208,8 @@ html, body {
 
 .icon-item.warn {
     color: #ff3c3c;
+}
+
+.icon-item.locked {
+    color: #ffea00;
 }
