@@ -91,10 +91,10 @@ html, body {
     color: #aaaaaa;
 }
 
-/* STATS (CHECK ENGINE LOGO & FUEL BAR) */
+/* STATS (HEALTH & FUEL) */
 .right-stats {
     display: flex;
-    gap: 14px;
+    gap: 12px;
     align-items: center;
 }
 
@@ -120,41 +120,33 @@ html, body {
     gap: 2px;
 }
 
-.f-seg {
+.h-seg, .f-seg {
     width: 12px;
     height: 3px;
     background: rgba(255, 255, 255, 0.12);
     border-radius: 1px;
 }
 
-/* BAR BENSIN (Putih Terang) */
-.f-seg.active { 
+/* BAR SEGMEN ENGINE & FUEL (Keduanya dibuat Putih Bersih) */
+.h-seg.active, .f-seg.active { 
     background: #ffffff; 
 }
 
-/* STAT ICON DEFAULT */
+/* CHECK ENGINE ICON */
 .stat-icon {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
+    transition: color 0.2s ease;
 }
 
-/* PENYESUAIAN IKON CHECK ENGINE LONE */
-.solo-engine-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    transition: color 0.2s ease, background 0.2s ease;
+#engine-icon.active-warn {
+    color: #ff9100; /* Nyala Oranye saat Health <= 50% */
 }
 
-/* WARNA CHECK ENGINE SESUAI HEALTH */
-#engine-icon.good { color: #00ff66; }    /* Mesin Sehat (> 75%) */
-#engine-icon.medium { color: #ffea00; }  /* Mulai Aus (51% - 75%) */
-#engine-icon.warn { color: #ff9100; }    /* Rusak Sedang (26% - 50%) */
-#engine-icon.danger { color: #ff3333; }  /* Rusak Parah (<= 25%) */
+#engine-icon.active-danger {
+    color: #ff3333; /* Nyala Merah saat Health <= 25% */
+}
 
 /* RPM BAR */
 .rpm-bar {
