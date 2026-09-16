@@ -4,7 +4,6 @@ const MPS_TO_MPH = 2.236936;
 const elSpeed = document.getElementById('speed-display');
 const elGear = document.getElementById('gear');
 const elOdo = document.getElementById('odometer');
-const hSegs = document.querySelectorAll('.h-seg');
 const fSegs = document.querySelectorAll('.f-seg');
 const rpmSegs = document.querySelectorAll('.rpm-segment');
 
@@ -43,35 +42,22 @@ window.setFuel = function(fuel) {
     });
 };
 
-// 4. Health Segmen (Gradient & Check Engine Icon)
+// 4. Engine Health (Perubahan Warna Pada Ikon Check Engine)
 window.setHealth = function(health) {
     let percent = (health > 1) ? (health / 1000) : health;
     percent = Math.max(0, Math.min(1, percent));
-    const totalSegs = hSegs.length;
-    const activeSegs = Math.round(percent * totalSegs);
     const engineIcon = document.getElementById('engine-icon');
     
-    hSegs.forEach((seg, i) => {
-        seg.className = 'h-seg';
-        if (i < activeSegs) {
-            if (i < 2.5) {
-                seg.classList.add('danger');
-            } else if (i < 5) {
-                seg.classList.add('warn');
-            } else if (i < 7.5) {
-                seg.classList.add('medium');
-            } else {
-                seg.classList.add('good');
-            }
-        }
-    });
-
     if (engineIcon) {
-        engineIcon.className = 'stat-icon';
-        if (percent <= 0.25) {
-            engineIcon.classList.add('active-danger');
-        } else if (percent <= 0.50) {
-            engineIcon.classList.add('active-warn');
+        engineIcon.className = 'stat-icon solo-engine-icon';
+        if (percent > 0.75) {
+            engineIcon.classList.add('good');    // Hijau
+        } else if (percent > 0.50) {
+            engineIcon.classList.add('medium');  // Kuning
+        } else if (percent > 0.25) {
+            engineIcon.classList.add('warn');    // Oranye
+        } else {
+            engineIcon.classList.add('danger');  // Merah
         }
     }
 };
