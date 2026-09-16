@@ -43,7 +43,7 @@ window.setFuel = function(fuel) {
     });
 };
 
-// 4. Health Segmen (Putih & Check Engine Icon)
+// 4. Health Segmen
 window.setHealth = function(health) {
     let percent = (health > 1) ? (health / 1000) : health;
     percent = Math.max(0, Math.min(1, percent));
@@ -59,9 +59,9 @@ window.setHealth = function(health) {
     if (engineIcon) {
         engineIcon.className = 'stat-icon';
         if (percent <= 0.25) {
-            engineIcon.classList.add('active-danger'); // Merah jika <= 25%
+            engineIcon.classList.add('active-danger');
         } else if (percent <= 0.50) {
-            engineIcon.classList.add('active-warn');   // Oranye jika <= 50%
+            engineIcon.classList.add('active-warn');
         }
     }
 };
@@ -100,7 +100,13 @@ window.setSeatbelts = function(state) {
     if (el) el.className = state ? 'icon-item active' : 'icon-item warn';
 };
 
-// 11. Odometer
+// 11. Door Lock (Kunci Mobil)
+window.setDoors = function(state) {
+    const el = document.getElementById('door-lock');
+    if (el) el.className = state ? 'icon-item locked' : 'icon-item';
+};
+
+// 12. Odometer
 window.setOdometer = function(distance) {
     if (elOdo) elOdo.innerText = `${distance.toFixed(1)} mi`;
 };
