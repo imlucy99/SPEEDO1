@@ -100,11 +100,16 @@ window.setSeatbelts = function(state) {
     if (el) el.className = state ? 'icon-item active' : 'icon-item warn';
 };
 
-// 11. Door Lock (Kunci Mobil)
+// 11. Door Lock / Vehicle Lock (Ditambah Alias Kompatibilitas)
 window.setDoors = function(state) {
     const el = document.getElementById('door-lock');
-    if (el) el.className = state ? 'icon-item locked' : 'icon-item';
+    if (el) el.className = (state == 1 || state === true) ? 'icon-item locked' : 'icon-item';
 };
+
+// Alias pendukung jika mod panggilan gamenya menggunakan nama fungsi berbeda
+window.setVehicleLocked = window.setDoors;
+window.setLocked = window.setDoors;
+window.setLock = window.setDoors;
 
 // 12. Odometer
 window.setOdometer = function(distance) {
