@@ -8,7 +8,7 @@ const hSegs = document.querySelectorAll('.h-seg');
 const fSegs = document.querySelectorAll('.f-seg');
 const rpmSegs = document.querySelectorAll('.rpm-segment');
 
-// 1. Kecepatan (3 Digit dengan Angka Redup di Depan)
+// 1. Kecepatan (3 Digit)
 window.setSpeed = function(speed) {
     if (!elSpeed) return;
     const mph = Math.round(speed * MPS_TO_MPH);
@@ -23,7 +23,7 @@ window.setSpeed = function(speed) {
     }
 };
 
-// 2. RPM Bar Segmen
+// 2. RPM Bar
 window.setRPM = function(rpm) {
     const totalSegs = rpmSegs.length;
     const activeSegs = Math.round(rpm * totalSegs);
@@ -33,7 +33,7 @@ window.setRPM = function(rpm) {
     });
 };
 
-// 3. Fuel Segmen
+// 3. Fuel Segmen (Putih)
 window.setFuel = function(fuel) {
     const totalSegs = fSegs.length;
     const activeSegs = Math.round(fuel * totalSegs);
@@ -43,21 +43,37 @@ window.setFuel = function(fuel) {
     });
 };
 
-// 4. Health Segmen
+// 4. Health Segmen (Gradient & Check Engine Icon)
 window.setHealth = function(health) {
     let percent = (health > 1) ? (health / 1000) : health;
     percent = Math.max(0, Math.min(1, percent));
     const totalSegs = hSegs.length;
     const activeSegs = Math.round(percent * totalSegs);
+    const engineIcon = document.getElementById('engine-icon');
     
     hSegs.forEach((seg, i) => {
         seg.className = 'h-seg';
         if (i < activeSegs) {
-            if (percent <= 0.25) seg.classList.add('danger');
-            else if (percent <= 0.5) seg.classList.add('warn');
-            else seg.classList.add('active');
+            if (i < 2.5) {
+                seg.classList.add('danger');
+            } else if (i < 5) {
+                seg.classList.add('warn');
+            } else if (i < 7.5) {
+                seg.classList.add('medium');
+            } else {
+                seg.classList.add('good');
+            }
         }
     });
+
+    if (engineIcon) {
+        engineIcon.className = 'stat-icon';
+        if (percent <= 0.25) {
+            engineIcon.classList.add('active-danger');
+        } else if (percent <= 0.50) {
+            engineIcon.classList.add('active-warn');
+        }
+    }
 };
 
 // 5. Gear
@@ -69,7 +85,7 @@ window.setGear = function(gear) {
 // 6. Engine
 window.setEngine = function(state) {};
 
-// 7. Headlights (0: Off, 1: Low, 2: High)
+// 7. Headlights
 window.setHeadlights = function(state) {
     const low = document.getElementById('headlight-low');
     const high = document.getElementById('headlight-high');
