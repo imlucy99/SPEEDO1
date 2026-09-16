@@ -91,10 +91,10 @@ html, body {
     color: #aaaaaa;
 }
 
-/* STATS (HEALTH & FUEL) */
+/* STATS (CHECK ENGINE LOGO & FUEL BAR) */
 .right-stats {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     align-items: center;
 }
 
@@ -120,39 +120,41 @@ html, body {
     gap: 2px;
 }
 
-.h-seg, .f-seg {
+.f-seg {
     width: 12px;
     height: 3px;
     background: rgba(255, 255, 255, 0.12);
     border-radius: 1px;
 }
 
-/* BAR BENSIN (Putih Bersih) */
+/* BAR BENSIN (Putih Terang) */
 .f-seg.active { 
     background: #ffffff; 
 }
 
-/* ENGINE HEALTH GRADIENT */
-.h-seg.good { background: #00ff66; }
-.h-seg.medium { background: #ffea00; }
-.h-seg.warn { background: #ff9100; }
-.h-seg.danger { background: #ff3333; }
-
-/* CHECK ENGINE ICON */
+/* STAT ICON DEFAULT */
 .stat-icon {
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.5);
     display: flex;
     align-items: center;
-    transition: color 0.2s ease;
 }
 
-#engine-icon.active-warn {
-    color: #ff9100;
+/* PENYESUAIAN IKON CHECK ENGINE LONE */
+.solo-engine-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    transition: color 0.2s ease, background 0.2s ease;
 }
 
-#engine-icon.active-danger {
-    color: #ff3333;
-}
+/* WARNA CHECK ENGINE SESUAI HEALTH */
+#engine-icon.good { color: #00ff66; }    /* Mesin Sehat (> 75%) */
+#engine-icon.medium { color: #ffea00; }  /* Mulai Aus (51% - 75%) */
+#engine-icon.warn { color: #ff9100; }    /* Rusak Sedang (26% - 50%) */
+#engine-icon.danger { color: #ff3333; }  /* Rusak Parah (<= 25%) */
 
 /* RPM BAR */
 .rpm-bar {
