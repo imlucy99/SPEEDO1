@@ -127,14 +127,31 @@ html, body {
     border-radius: 1px;
 }
 
-.f-seg.active, .h-seg.active { background: #00e5ff; }
-.h-seg.warn { background: #ffaa00; }
+/* BAR BENSIN (Putih Bersih) */
+.f-seg.active { 
+    background: #ffffff; 
+}
+
+/* ENGINE HEALTH GRADIENT */
+.h-seg.good { background: #00ff66; }
+.h-seg.medium { background: #ffea00; }
+.h-seg.warn { background: #ff9100; }
 .h-seg.danger { background: #ff3333; }
 
+/* CHECK ENGINE ICON */
 .stat-icon {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
+    transition: color 0.2s ease;
+}
+
+#engine-icon.active-warn {
+    color: #ff9100;
+}
+
+#engine-icon.active-danger {
+    color: #ff3333;
 }
 
 /* RPM BAR */
