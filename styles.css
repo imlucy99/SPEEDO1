@@ -127,7 +127,7 @@ html, body {
     border-radius: 1px;
 }
 
-/* BAR SEGMEN ENGINE & FUEL (Putih) */
+/* BAR SEGMEN ENGINE & FUEL */
 .h-seg.active, .f-seg.active { 
     background: #ffffff; 
 }
